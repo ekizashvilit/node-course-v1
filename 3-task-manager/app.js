@@ -5,13 +5,10 @@ require('dotenv').config();
 const connectDB = require('./db/connect');
 const tasks = require('./routes/tasks');
 
+app.use(express.static('./public'));
 app.use(express.json());
 
 app.use('/api/v1/tasks', tasks);
-
-app.get('/hello', (req, res) => {
-  res.send('task manager app');
-});
 
 const port = 3000;
 
