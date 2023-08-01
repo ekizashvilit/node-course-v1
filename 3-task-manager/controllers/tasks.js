@@ -1,4 +1,5 @@
 const Task = require('../models/Task');
+const { createCustomError } = require('../errors/custom-error');
 
 const getAllTasks = async (req, res) => {
   try {
@@ -18,13 +19,15 @@ const createTask = async (req, res) => {
   }
 };
 
-const getTask = async (req, res) => {
+const getTask = async (req, res, next) => {
   try {
     const { id: taskID } = req.params;
     const task = await Task.findOne({ _id: taskID });
 
     if (!task) {
-      return res.status(404).json({ msg: `no task with id ${taskID}` });
+      return next(createCustomError(`no task with id ${taskID}`, 404));
+
+      // return res.status(404).json({ msg: `no task with id ${taskID}` });
     }
 
     res.status(200).json({ task });
@@ -42,7 +45,7 @@ const deleteTask = async (req, res) => {
     );
 
     if (!task) {
-      return res.status(404).json({ msg: `no task with id ${taskID}` });
+      return next(createCustomError(`no task with id ${taskID}`, 404));
     }
 
     res.status(200).json({ task });
@@ -62,7 +65,7 @@ const updateTask = async (req, res) => {
     });
 
     if (!task) {
-      return res.status(404).json({ msg: `no task with id ${taskID}` });
+      return next(createCustomError(`no task with id ${taskID}`, 404));
     }
 
     res.status(200).json({ task });
