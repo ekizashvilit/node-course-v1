@@ -3,7 +3,6 @@ const authorize = (req, res, next) => {
 
   if (user) {
     req.user = { name: 'john', id: 3 };
-    console.log(req.user);
     next();
   } else {
     res.status(401).send('unauthorized');
