@@ -3,18 +3,14 @@ const { StatusCodes } = require('http-status-codes');
 const { BadRequestError, NotFoundError } = require('../errors');
 
 const getAllJobs = async (req, res) => {
-  const jobs = await Job.find({ createdBy: req.user.userId.userId }).sort(
-    'createdAt'
-  );
+  const jobs = await Job.find({ createdBy: req.user.userId }).sort('createdAt');
 
   res.status(StatusCodes.OK).json({ count: jobs.length, jobs });
 };
 
 const getJob = async (req, res) => {
   const {
-    user: {
-      userId: { userId },
-    },
+    user: { userId },
     params: { id: jobId },
   } = req;
 
@@ -28,7 +24,7 @@ const getJob = async (req, res) => {
 };
 
 const createJob = async (req, res) => {
-  req.body.createdBy = req.user.userId.userId;
+  req.body.createdBy = req.user.userId;
   const job = await Job.create(req.body);
   res.status(StatusCodes.CREATED).json({ job });
 };
@@ -36,9 +32,7 @@ const createJob = async (req, res) => {
 const updateJob = async (req, res) => {
   const {
     body: { company, position },
-    user: {
-      userId: { userId },
-    },
+    user: { userId },
     params: { id: jobId },
   } = req;
 
@@ -62,9 +56,7 @@ const updateJob = async (req, res) => {
 const deleteJob = async (req, res) => {
   const {
     body: { company, position },
-    user: {
-      userId: { userId },
-    },
+    user: { userId },
     params: { id: jobId },
   } = req;
 
